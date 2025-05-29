@@ -1,0 +1,59 @@
+{
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node" /* Use Node.js style module resolution. */,
+    "lib": ["ES2023", "dom"] /* Include Node 20 parity and DOM types */,
+    "allowJs": true /* Allow javascript files to be compiled. */,
+    "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
+    "alwaysStrict": true /* Parse in strict mode and emit "use strict" for each source file. */,
+    "declaration": true /* Generates corresponding '.d.ts' file. */,
+    "declarationMap": false /* Generates a sourcemap for each corresponding '.d.ts' file. */,
+    "downlevelIteration": true /* Allows iteration over iterables using the spread operator */,
+    "composite": true /* Enables project references */,
+    "emitDeclarationOnly": true /* Only emit .d.ts files */,
+    "esModuleInterop": true /* Enables import without using `import * as Foo from 'foo'` */,
+    "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
+    "forceConsistentCasingInFileNames": true /* Makes imports case-sensitive */,
+    "importsNotUsedAsValues": "remove" /* Ensures that we use 'import type' when only types are imported */,
+    "isolatedModules": true /* Enforces that modules are self contained. Requires an "export" statement in all ts files. */,
+    "noEmit": false /* Do not emit outputs. */,
+    "noFallthroughCasesInSwitch": false /* Report errors for fallthrough cases in switch statement. */,
+    "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
+    "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
+    "noUnusedLocals": false /* Already checked by ESLint. */,
+    "noUnusedParameters": false /* Already checked by ESLint. */,
+    "resolveJsonModule": true /* Allows importing '*.json' */,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true /* Skips type checking against /node_modules. Speeds up tsc. */,
+    "sourceMap": false /* Skips generating corresponding '.map' file. */,
+    "strictNullChecks": true /* Enable strict null checks. */,
+    "strictFunctionTypes": true /* Enable strict checking of function types. */,
+    "jsx": "react-jsx" /* Lets VSCode know that JSX is allowed. */,
+    "incremental": true /* Stores a tsBuildInfo file to skip re-compiling same ./out code. */,
+    "noUncheckedIndexedAccess": true /* Will add undefined to any un-declared field in the type. */,
+    // Standard output directory.
+    "outDir": "out",
+    // Sharing type definitions for external packages
+    "typeRoots": [
+      "node_modules/@types",
+      "../../node_modules/@types",
+      "src/types",
+    ]
+  },
+  "ts-node": {
+    // Tell ts-node CLI to install the --loader automatically. See https://www.npmjs.com/package/ts-node?activeTab=readme#commonjs
+    "esm": true
+  },
+  "include": ["scripts/**/*", "src/**/*"],
+  "exclude": [
+    "node_modules",
+    "**/node_modules",
+    "**/*.test.ts",
+    "public",
+    "out",
+    "**/out",
+    "**/dist",
+    "**/coverage",
+  ]
+}

@@ -1,0 +1,17 @@
+# dependencies
+node_modules
+
+# testing
+coverage
+
+# environment files
+.env
+.npmrc
+
+# auth files
+auth
+credentials.json
+
+# build files
+out
+public
