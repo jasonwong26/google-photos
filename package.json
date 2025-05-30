@@ -17,9 +17,10 @@
     "build:client": "tsx ./scripts/esbuild.client.ts",
     "build:server": "tsx ./scripts/esbuild.server.ts",
     "prestart": "npm run build",
-    "start": "tsx ./scripts/startServer.ts",
+    "start": "node ./out/server.js",
     "predev": "npm run build",
-    "dev": "NODE_ENV=development tsx ./scripts/startServer.ts"
+    "dev:old": "NODE_ENV=development tsx ./scripts/startServer.ts",
+    "dev": "NODE_ENV=development tsx ./src/server/index.ts"
   },
   "dependencies": {
     "@types/react": "^19.1.6",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.5",
+    "@types/esbuild-copy-static-files": "^0.1.4",
     "@types/express": "^5.0.2",
     "@types/express-session": "^1.18.1",
     "@types/jest": "^29.5.14",

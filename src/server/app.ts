@@ -11,9 +11,10 @@ import { apiRouter } from './routes/apiRoutes';
 import { isAuthenticated } from './utils/isAuthenticated';
 import { clientRouter } from './routes/clientRoutes';
 import 'dotenv/config';
+import { directories } from './utils/directories';
 
 // Initialize Express app
-const app = express();
+export const app = express();
 
 // Configure middleware
 app.use(express.json());
@@ -34,7 +35,7 @@ app.use(passport.session());
 configurePassport(passport);
 
 // Serve static files
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(directories.public));
 
 // Use auth routes
 app.use('/auth', authRouter);
@@ -50,11 +51,3 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-export default app;

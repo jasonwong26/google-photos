@@ -15,7 +15,7 @@ async function build() {
   try {
     // Build the React app
     await esbuild.build({
-      entryPoints: ['src/server/app.ts'],
+      entryPoints: ['src/server/index.ts'],
       bundle: true,
       format: 'cjs',
       minify: false,
@@ -29,7 +29,7 @@ async function build() {
       plugins: [
         copy({
           src: 'src/static',
-          dest: 'out',
+          dest: 'out/static',
         }),
       ],
     });
