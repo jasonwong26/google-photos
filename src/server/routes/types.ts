@@ -1,4 +1,5 @@
 
+/** User information stored in the session.  For Server use ONLY */
 export interface AuthenticatedUser {
   id: string;
   name: string;
@@ -9,6 +10,10 @@ export interface AuthenticatedUser {
   refreshToken?: string;
 };
 
+/** User Profile information.  For Client UX. */
+export type UserProfile = Pick<AuthenticatedUser, 'id' | 'name' | 'profilePhoto' | 'givenName' | 'familyName'>;
+
+/** Profile information returned by the Google Auth API. */ 
 export interface GoogleProfile {
   provider: 'google',
   sub: string,

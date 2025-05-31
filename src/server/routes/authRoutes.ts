@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { scopes } from '../../auth'; // Path to src/auth.ts
+
+import { scopes } from '../utils/auth';
 
 export const authRouter = Router();
 
@@ -15,4 +16,3 @@ authRouter.get('/google/callback',
     successRedirect: '/profile'     // This will redirect to the global /profile route in app.ts
   })
 );
-

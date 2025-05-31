@@ -1,8 +1,10 @@
-import { PassportStatic } from 'passport';
-
-import 'dotenv/config'
+import { type Express } from 'express';
+import session from 'express-session';
+import passport, { PassportStatic } from 'passport';
 import { Strategy as GoogleStrategy, VerifyFunctionWithRequest } from 'passport-google-oauth2';
-import { AuthenticatedUser, GoogleProfile } from './server/routes/types';
+import 'dotenv/config'
+
+import { AuthenticatedUser, GoogleProfile } from '../routes/types';
 
 export const scopes = [
   "profile",
@@ -14,7 +16,23 @@ export const scopes = [
   "https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata",
 ];
 
-export const configurePassport = (passport: PassportStatic) => {
+export const initializeAuthorization = (app: Express) => {
+  // Configure session
+  app.use(session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+  }));
+    
+  // Initialize Passport
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  // Configure Passport Google OAuth2 strategy
+  configurePassport(passport);
+}
+
+const configurePassport = (passport: PassportStatic) => {
   // Passport serialization
   passport.serializeUser((user, done) => {
     done(null, user);
