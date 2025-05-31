@@ -1,72 +1,75 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-
-interface ProfileData {
-  [key: string]: any;
-}
+import type { UserProfile } from '../../server/routes/types';
 
 export const Profile: FC = () => {
-  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
-      try {
-        const response = await fetch('/api/profile');
-        if (!response.ok) {
-          if (response.status === 401) {
-            setError('Not authenticated. Please log in.');
-          } else {
-            const error = await response.json();
-            throw new Error(`HTTP error! status: ${error.message ?? 'unknown error'}`);
-          }
-          setProfileData(null); // Clear data on auth error
-        } else {
-          const data = await response.json();
-          setProfileData(data);
-        }
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
+      const response = await fetch('/api/profile');
+      setLoading(false);
+
+      if(response.ok) {
+        const data = await response.json();
+        setProfileData(data);
+        setIsAuthenticated(true);
+        return;
+      } 
+      
+      if (response.status === 401) {
+        setIsAuthenticated(false);
+        setProfileData(null);
+        return;
+      } 
+
+      throw new Error(`Failed to fetch profile data. response status: ${response.status}`);
     };
 
     fetchProfile();
   }, []);
 
-  if (loading) {
-    return <div className="profile"><h1>Loading profile...</h1></div>;
-  }
-
-  if (error) {
-    return <div className="profile"><h1>Error</h1><p>{error}</p></div>;
-  }
-
-  if (!profileData) {
-    return <div className="profile"><h1>Profile page</h1><p>No profile data available.</p></div>;
-  }
-
   return (
     <div className="profile">
-      <h1>Profile Page</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Key</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(profileData).map(([key, value]) => (
-            <tr key={key}>
-              <td>{key}</td>
-              <td>{typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {loading && <LoadingState />}
+      {!loading && !isAuthenticated && <UnauthenticatedState />}
+      {profileData && <ProfileData data={profileData} />}
     </div>
+  );
+};
+
+const LoadingState: FC = () => {
+  return <h1>Loading profile...</h1>;
+};
+
+const UnauthenticatedState: FC = () => {
+  return <h1>Not authenticated. Please log in.</h1>;
+};
+
+interface ProfileDataProps {
+  data: UserProfile;
+}
+
+const ProfileData: FC<ProfileDataProps> = ({ data }) => {
+  return (
+    <>
+      {data.profilePhoto && (
+        <div className="profile-image">
+          <img 
+            src={data.profilePhoto} 
+            alt="Profile Photo" 
+            style={{ 
+              width: '96px', 
+              height: '96px', 
+              borderRadius: '50%', 
+              objectFit: 'cover' 
+            }} 
+          />
+        </div>
+      )}
+      <h1>Welcome {data.givenName}</h1>
+    </>
   );
 };
